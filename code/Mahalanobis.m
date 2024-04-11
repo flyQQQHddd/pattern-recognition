@@ -1,3 +1,14 @@
+
+% 脚本名：Mahalanobis.m
+% 描述：mashijul
+% 编码：utf-8
+% 测试环境：MATLAB R2022b
+% 作者：曲浩栋
+% 学号：2021302131044
+% 单位：武汉大学遥感信息工程学院-空间信息与数字技术
+% 课程名：计算机视觉与模式识别（模式识别部分）
+% 最后修订时间：2023-05-28
+
 clear;clc;
 load("whu.mat")
 
@@ -36,39 +47,30 @@ ConfusionMatrix=zeros(NumOfROIs,NumOfROIs);
 for i=1:100*NumOfROIs
     ConfusionMatrix(test(i,end),classify(i))=ConfusionMatrix(test(i,end),classify(i))+1;
 end
-
-precision=sum(diag(ConfusionMatrix))/(100*NumOfROIs)
+precision=sum(diag(ConfusionMatrix))/(100*NumOfROIs);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 对整张图像进行分类
 
+% 读取原始影像
 tif=imread("whu.tif");
-Info=imfinfo("whu.tif");
+[M,N,bands]=size(tif);
 
-test_size=1024;
-tif=tif(1:test_size,1:test_size,:);
-Size=[test_size,test_size];
-
+% 假彩色增强显示原始图像
 imshow(cat(3,tif(:,:,6),tif(:,:,4),tif(:,:,3)))
-figure,imshow(imread("envi_r2.tif"))
- 
-tif_2=double(reshape(tif(:),Size(1)*Size(2),n));
+tif=double(reshape(tif, M*N,[]));
 
-
-tif_r2=[];
+% 计算各类别马氏距离并分类
+r2_s=[];
 for i=1:NumOfROIs
-    mean_2=repmat(means{i}',Size(1)*Size(2),1);
-
-    dpix=tif_2-mean_2;
-
-    type_r2=sum((dpix/covs{i}).*dpix,2);
-
-    tif_r2=cat(2,tif_r2,type_r2);
+    dpix=tif-means{i}';
+    r2=sum((dpix/covs{i}).*dpix,2);
+    r2_s=cat(2,r2_s,r2);
 end
 
-
-[~,type]=min(tif_r2,[],2);
-classify=reshape(type,Size(1),Size(2));
+% 根据类别赋予不同的颜色
+[~,type]=min(r2_s,[],2);
+classify=reshape(type,M,N);
 
 colors_R=[0,255,0,160];
 colors_G=[255,0,0,32];

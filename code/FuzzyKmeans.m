@@ -1,3 +1,9 @@
+% 脚本名：KL.m
+% 描述：KL变换
+% 编码：utf-8
+% 测试环境：MATLAB R2022b
+% CSDN找的代码
+
 
 clear;clc;
 

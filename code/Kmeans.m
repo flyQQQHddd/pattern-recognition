@@ -1,4 +1,16 @@
 
+% 脚本名：Kmeans.m
+% 描述：K-means聚类分析
+% 编码：utf-8
+% 测试环境：MATLAB R2022b
+% 作者：曲浩栋
+% 学号：2021302131044
+% 单位：武汉大学遥感信息工程学院-空间信息与数字技术
+% 课程名：计算机视觉与模式识别（模式识别部分）
+% 最后修订时间：2023-05-28
+
+
+
 clear;clc;
 
 tif=double(imread('whu.tif'));
@@ -24,6 +36,7 @@ while true
     error=norm(center-old_center,'fro');
     e=cat(2,e,error);
     t=t+1;
+    % 误差小于1e-3或迭代次数超过100，退出循环
     if error < 1e-3 || t>100
         break;
     end
@@ -41,10 +54,13 @@ new_tif=cat(3,colors_R(type),colors_G(type),colors_B(type));
 new_tif=uint8(new_tif);
 
 % 绘制结果
-
 figure,imshow(new_tif)
-figure,plot(e,'LineWidth',2,'Marker','*')
-
+figure
+hold on
+plot(e,'LineWidth',2,'Marker','*')
+ylabel("新的聚类中心与上次聚类中心的误差")
+xlabel("迭代次数")
+hold off
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 定义的函数
 

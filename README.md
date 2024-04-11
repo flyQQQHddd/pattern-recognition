@@ -10,7 +10,8 @@
 |Mahalanobis.m|马氏距离分类器|
 |Kmeans.m|K均值聚类|
 |FuzzyKmeans.m|模糊K均值聚类|
-|ISODATA.m|IOSDATA算法|
+|ANN.m|人工神经网络|
+|KL.m|KL变换|
 
 ## TM影像下载与处理
 
